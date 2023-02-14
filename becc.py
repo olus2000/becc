@@ -9,7 +9,7 @@ def evaluate(s, debug=False, calc=False):
         if ip >= len(s): s, ip = ret.pop()
         com = s[ip]
         ip += 1
-        if debug:
+        if debug and com in '><+-,.$[]':
             print(s)
             print('Command:', com)
             print('Stack:')
@@ -61,7 +61,7 @@ def evaluate(s, debug=False, calc=False):
             case '[':
                 n = ''
                 c = 1
-                while True:
+                while c:
                     try:
                         com = s[ip]
                     except IndexError:
@@ -71,10 +71,8 @@ def evaluate(s, debug=False, calc=False):
                         c += 1
                     if com == ']':
                         c -= 1
-                    if c:
+                    if c and com in '+-><[],.$':
                         n += com
-                    else:
-                        break
                 stack.append(n)
             case ']':
                 raise Exception(f'Unexpected "]" at position {ip} in "{s}"')
