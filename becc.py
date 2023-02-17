@@ -5,17 +5,22 @@ def evaluate(s, debug=False, calc=False):
     ip = 0
     ans = ''
     buf = []
+    skip_point = None
     while ret or ip < len(s):
         if ip >= len(s): s, ip = ret.pop()
         com = s[ip]
         ip += 1
-        if debug and com in '><+-,.$[]':
+        if debug and com in '><+-,.$[]' and (skip_point is None or
+                                             skip_point > len(ret)):
             print(s)
             print('Command:', com)
             print('Stack:')
             for i in stack:
                 print(i)
-            input('...')
+            if input('...') == 's':
+                skip_point = len(ret)
+            else:
+                skip_point = None
         match com:
             case '>':
                 if len(stack) < 2:
